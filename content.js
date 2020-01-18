@@ -12,28 +12,35 @@ for (let i = 0, l = labels.length; i < l; i++) {
 // APIs while toggling between languages.
 var translatedLabels =[]
 
-$.ajax({
-  url: "https://hackapi.reverieinc.com/nmt",
-  headers: { 
-    'Content-Type':'application/json',
-    'token': '106c1c674bd9b81ece4194667167f68ba46fbe03'
-  },
-  method: 'POST',
-  dataType: 'json',
-  "data": JSON.stringify({
-    "data" : output_labels,
-    "tgt" : "hi",
-    "src" : "en"
-  }),
-  success: function (res) {
-    flag = 1;
-    console.log(res.data.result.flat(1));
-    translatedLabels = res.data.result.flat(1);
-    for (let i = 0, l = labels.length; i < l; i++) {
-      labels[i].innerText = translatedLabels[i];
-    }
-    console.log(labels);
-  }
+  $.ajax({
+    url: "https://hackapi.reverieinc.com/nmt",
+    headers: {
+      'Content-Type': 'application/json',
+      'token': '106c1c674bd9b81ece4194667167f68ba46fbe03'
+    },
+    method: 'POST',
+    dataType: 'json',
+    "data": JSON.stringify({
+      "data": output_labels,
+      "tgt": "hi",
+      "src": "en"
+    }),
+    success: function (res) {
+      flag = 1;
+      console.log(res.data.result.flat(1));
+      translatedLabels = res.data.result.flat(1);
+      for (let i = 0, l = labels.length; i < l; i++) {
+        labels[i].innerText = translatedLabels[i];
+      }
+      var play = document.getElementById('play');
+      play.style.visibility = "visible";
+      for (let i = 1; i < 5; i++){
+        var plays = 'play' + i;
+        console.log(plays);
+        var play = document.getElementById(plays);
+      play.style.visibility = "visible";
+      }
+    }  
 });
   sendResponse({data: data, success: true});
 });
