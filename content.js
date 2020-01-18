@@ -1,5 +1,3 @@
-var flag = 0;
-
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log("something happening from the extension");
   var data = request.data || 1;
@@ -35,24 +33,6 @@ $.ajax({
       labels[i].innerText = translatedLabels[i];
     }
     console.log(labels);
-    $.ajax({
-      url: "https://hackapi.reverieinc.com/tts",
-      headers: { 
-        'Content-Type':'application/json',
-        'token': '106c1c674bd9b81ece4194667167f68ba46fbe03'
-      },
-      method: 'POST',
-      dataType: 'json',
-      "data": JSON.stringify({
-        "text" : translatedLabels[0],
-        "lang" : "hi",
-      }),
-      success: function(res){
-        filename = test.wav;
-        
-        
-      }    
-    });
   }
 });
   sendResponse({data: data, success: true});
