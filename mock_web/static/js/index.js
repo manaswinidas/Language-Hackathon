@@ -1,5 +1,5 @@
-$(document).ready(function(){
-    $("#form").submit(event =>{
-        event.preventDefault();
-    });
-})
+$(document).ready(function() {
+  $("#form").submit(event => {
+    event.preventDefault();
+  });
+});

@@ -1,46 +1,50 @@
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function(
+  request,
+  sender,
+  sendResponse,
+) {
   console.log("something happening from the extension");
   var data = request.data || 1;
-    var labels = document.getElementsByTagName('label');
-var output_labels=[]
+  var labels = document.getElementsByTagName("label");
+  var output_labels = [];
 
-for (let i = 0, l = labels.length; i < l; i++) {
-  output_labels[i] = labels[i].innerText;
-}
+  for (let i = 0, l = labels.length; i < l; i++) {
+    output_labels[i] = labels[i].innerText;
+  }
 
-// TODOs : Have the original labels stored such that we dont need to hit
-// APIs while toggling between languages.
-var translatedLabels =[]
+  // TODOs : Have the original labels stored such that we dont need to hit
+  // APIs while toggling between languages.
+  var translatedLabels = [];
+
+  let urlContent = encodeURI(output_labels.join("%"));
 
   $.ajax({
-    url: "https://hackapi.reverieinc.com/nmt",
+    url:
+      "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=hi&dt=t&q=" +
+      urlContent,
     headers: {
-      'Content-Type': 'application/json',
-      'token': '106c1c674bd9b81ece4194667167f68ba46fbe03'
+      "Content-Type": "application/json",
     },
-    method: 'POST',
-    dataType: 'json',
-    "data": JSON.stringify({
-      "data": output_labels,
-      "tgt": "hi",
-      "src": "en"
-    }),
-    success: function (res) {
+    method: "GET",
+    dataType: "json",
+
+    success: function(data) {
       flag = 1;
-      console.log(res.data.result.flat(1));
-      translatedLabels = res.data.result.flat(1);
+      let translatedResponse = data[0][0][0];
+      console.log(data[0][0][0]);
+      translatedLabels = translatedResponse.split("% ");
       for (let i = 0, l = labels.length; i < l; i++) {
         labels[i].innerText = translatedLabels[i];
       }
-      var play = document.getElementById('play');
+      var play = document.getElementById("play");
       play.style.visibility = "visible";
-      for (let i = 1; i < 5; i++){
-        var plays = 'play' + i;
+      for (let i = 1; i < 5; i++) {
+        var plays = "play" + i;
         console.log(plays);
         var play = document.getElementById(plays);
-      play.style.visibility = "visible";
+        play.style.visibility = "visible";
       }
-    }  
-});
-  sendResponse({data: data, success: true});
+    },
+  });
+  sendResponse({ data: data, success: true });
 });
