@@ -1,7 +1,7 @@
 {
-  "name": "Getting Started Example",
-  "version": "1.0",
-  "description": "Build an Extension!",
+  "name": "Sonores",
+  "version": "0.0.1",
+  "description": "An extension to facilitate net neutrality",
   "permissions": [
     "activeTab",
     "declarativeContent",

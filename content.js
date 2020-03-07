@@ -1,12 +1,17 @@
-chrome.runtime.onMessage.addListener(function(
-  request,
-  sender,
-  sendResponse,
-) {
-  console.log("something happening from the extension");
-  var data = request.data || 1;
-  var labels = document.getElementsByTagName("label");
-  var output_labels = [];
+let isTranslated = false;
+let isAudioEnabled = false;
+
+let output_labels = [];
+
+const restoreLabels = () => {
+  let labels = document.getElementsByTagName("label");
+  for (let i = 0, l = labels.length; i < l; i++) {
+    labels[i].innerText = output_labels[i];
+  }
+}
+
+const trandlateLabels = () => {
+  let labels = document.getElementsByTagName("label");
 
   for (let i = 0, l = labels.length; i < l; i++) {
     output_labels[i] = labels[i].innerText;
@@ -36,15 +41,51 @@ chrome.runtime.onMessage.addListener(function(
       for (let i = 0, l = labels.length; i < l; i++) {
         labels[i].innerText = translatedLabels[i];
       }
-      var play = document.getElementById("play");
-      play.style.visibility = "visible";
-      for (let i = 1; i < 5; i++) {
-        var plays = "play" + i;
-        console.log(plays);
-        var play = document.getElementById(plays);
-        play.style.visibility = "visible";
-      }
     },
   });
-  sendResponse({ data: data, success: true });
+}
+
+const enableAudio = () => {
+  console.log("inside enable audio");
+  let labels = document.getElementsByTagName("label");
+  for (let i = 0, l = labels.length; i < l; i++) {
+    $(`<input class="sonores-play" onclick='responsiveVoice.speak(` + `"${labels[i].innerText}"` + `);' type='button' value='🔊 Play'/>`).insertAfter(labels[i]);
+  }
+}
+
+const disableAudio = () => {
+  const buttons = document.getElementsByClassName("sonores-play");
+  const button_length  = buttons.length;
+  for(let i = 0; i < button_length; i ++){
+    buttons[0].remove();
+  }
+}
+
+chrome.runtime.onMessage.addListener(function(
+  request,
+  sender,
+  sendResponse,
+) {
+  
+  if(request.data === "translate"){
+    if(!isTranslated){
+      trandlateLabels();
+      isTranslated = true;
+    }else{
+      restoreLabels();
+      isTranslated = false;
+    }
+  }
+  if(request.data === "enableAudio"){
+    if(!isAudioEnabled){
+      enableAudio();
+      isAudioEnabled = true;
+    }
+    else{
+      disableAudio();
+      isAudioEnabled = false;
+    }
+  }
+  
+  sendResponse();
 });
