@@ -3,10 +3,16 @@ let isAudioEnabled = false;
 
 let output_labels = [];
 
+$('head').append(`<script src="https://code.responsivevoice.org/responsivevoice.js?key=yJQ0SRnY"></script>`);
+
 const restoreLabels = () => {
   let labels = document.getElementsByTagName("label");
   for (let i = 0, l = labels.length; i < l; i++) {
     labels[i].innerText = output_labels[i];
+  }
+  if(isAudioEnabled){
+    disableAudio();
+    enableAudio();
   }
 }
 
@@ -34,14 +40,19 @@ const trandlateLabels = () => {
     dataType: "json",
 
     success: function(data) {
-      flag = 1;
       let translatedResponse = data[0][0][0];
       console.log(data[0][0][0]);
       translatedLabels = translatedResponse.split("% ");
       for (let i = 0, l = labels.length; i < l; i++) {
         labels[i].innerText = translatedLabels[i];
       }
-    },
+
+    if(isAudioEnabled){
+      disableAudio();
+      enableAudio();
+    }
+
+    }
   });
 }
 
