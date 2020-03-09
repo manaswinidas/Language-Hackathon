@@ -3,20 +3,22 @@ let isAudioEnabled = false;
 
 let output_labels = [];
 
-$('head').append(`<script src="https://code.responsivevoice.org/responsivevoice.js?key=yJQ0SRnY"></script>`);
+$("head").append(
+  `<script src="https://code.responsivevoice.org/responsivevoice.js?key=yJQ0SRnY"></script>`,
+);
 
 const restoreLabels = () => {
   let labels = document.getElementsByTagName("label");
   for (let i = 0, l = labels.length; i < l; i++) {
     labels[i].innerText = output_labels[i];
   }
-  if(isAudioEnabled){
+  if (isAudioEnabled) {
     disableAudio();
     enableAudio();
   }
-}
+};
 
-const trandlateLabels = () => {
+const translateLabels = () => {
   let labels = document.getElementsByTagName("label");
 
   for (let i = 0, l = labels.length; i < l; i++) {
@@ -47,56 +49,57 @@ const trandlateLabels = () => {
         labels[i].innerText = translatedLabels[i];
       }
 
-    if(isAudioEnabled){
-      disableAudio();
-      enableAudio();
-    }
-
-    }
+      if (isAudioEnabled) {
+        disableAudio();
+        enableAudio();
+      }
+    },
   });
-}
+};
 
 const enableAudio = () => {
   console.log("inside enable audio");
   let labels = document.getElementsByTagName("label");
   for (let i = 0, l = labels.length; i < l; i++) {
-    $(`<input class="sonores-play" onclick='responsiveVoice.speak(` + `"${labels[i].innerText}"` + `);' type='button' value='🔊 Play'/>`).insertAfter(labels[i]);
+    $(
+      `<input class="sonores-play" onclick='responsiveVoice.speak(` +
+        `"${labels[i].innerText}"` +
+        `);' type='button' value='🔊 Play'/>`,
+    ).insertAfter(labels[i]);
   }
-}
+};
 
 const disableAudio = () => {
   const buttons = document.getElementsByClassName("sonores-play");
-  const button_length  = buttons.length;
-  for(let i = 0; i < button_length; i ++){
+  const button_length = buttons.length;
+  for (let i = 0; i < button_length; i++) {
     buttons[0].remove();
   }
-}
+};
 
 chrome.runtime.onMessage.addListener(function(
   request,
   sender,
   sendResponse,
 ) {
-  
-  if(request.data === "translate"){
-    if(!isTranslated){
-      trandlateLabels();
+  if (request.data === "translate") {
+    if (!isTranslated) {
+      translateLabels();
       isTranslated = true;
-    }else{
+    } else {
       restoreLabels();
       isTranslated = false;
     }
   }
-  if(request.data === "enableAudio"){
-    if(!isAudioEnabled){
+  if (request.data === "enableAudio") {
+    if (!isAudioEnabled) {
       enableAudio();
       isAudioEnabled = true;
-    }
-    else{
+    } else {
       disableAudio();
       isAudioEnabled = false;
     }
   }
-  
+
   sendResponse();
 });
