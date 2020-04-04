@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html>
-
+<header>
+  <h3 id="header">
+    Sonores
+  </h3>
+</header>
 <head>
+  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
-    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
-    .container {
-      max-height: 150px;
+    .container 
+    {
+      max-height: 130px;
       min-height: 100px;
-      width: 250px;
+      width: 210px;
       background: whitesmoke;
       display: flex;
       flex-direction: row;
@@ -18,13 +24,13 @@
       align-items: center;
       position: relative;
     }
-
-    body {
+    body
+    {
       font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
       font-size: 100%;
     }
-
-    .tooltip {
+    .tooltip
+    {
       position: relative;
       display: inline-block;
       display: inline-flex;
@@ -33,59 +39,85 @@
       background: #fff;
       box-shadow: 5px 5px rgba(0, 0, 0, 0);
       border-radius: 50px;
-      width: 7rem;
-      height: 2rem;
-      padding: 1rem 1rem;
-      margin-left: 8px;
+      width: 3rem;
+      height: 3rem;
+      padding: 1rem;
+      margin: 6px;
     }
-
-    .tooltip i {
+    .tooltip i
+    {
       position: absolute;
       display: flex;
       justify-content: center;
       align-items: center;
       margin: 0 0;
-      width: 2.5rem;
+      width: 2rem;
       height: 2rem;
       font-size: 20px;
       color: grey;
     }
-
-    .tooltip .tooltiptext {
+    .tooltip .tooltiptext
+    {
       visibility: hidden;
-      width: 100px;
+      width: 70px;
       background-color: black;
       color: #fff;
       text-align: center;
-      border-radius: 6px;
-      padding: 5px 0;
+      border-radius: 5px;
+      padding: 2px;
       /* Position the tooltip */
       position: absolute;
       z-index: 1;
       top: 100%;
-      left: 50%;
-      margin-left: -50px;
+      left: 70%;
+      margin-left: -45px;
+    }    
+    #header
+    {
+      font-size: 25px;
+      margin: 0%;
+      font-family: Georgia, 'Times New Roman', Times, serif;
     }
-
-    .tooltip:hover .tooltiptext {
+    #footer
+    {
+      float: right;
+      font-size: 100%;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+    }
+    #icon
+    {
+      margin: 4px;
+      size: 20px;
+    }
+    .tooltip:hover .tooltiptext 
+    {
       visibility: visible;
     }
   </style>
 </head>
-
 <body>
-
   <div class="container">
-    <!-- <h4>Do you want to translate?</h4>
-    <div> -->
-    <button class="tooltip" id="translate"><i class="fa fa-language"></i><span
-        class="tooltiptext">Translate</span></button>
-    <button class="tooltip" id="audio"><i class="fa fa-play"></i><span
-        class="tooltiptext">Play Audio</span></button>
-    <!-- </div> -->
+    <button class="tooltip" id="translate">
+      <i class="fa fa-language"></i>
+      <span class="tooltiptext">Translate</span>
+    </button>
+    <button class="tooltip" id="audio">
+      <i class="fa fa-play"></i>
+      <span class="tooltiptext">Play Audio</span>
+    </button>
+    <button class="tooltip" id="record">
+      <i class="fa fa-microphone"></i>
+      <span class="tooltiptext">Record</span>
+    </button>
   </div>
   <script src="/libraries/jquery/jquery.min.js" type="text/javascript"></script>
   <script src="popup.js" type="text/javascript"></script>
-</body>
-
+  <footer id="footer">
+    Made by PMRY
+    <a href="https://github.com/manaswinidas/Sonores-project/blob/develop/README.md" target="_blank">
+    <i class="fa fa-github" aria-hidden="true" id="icon"></i>
+    </a>
+  </footer>
+</body>  
 </html>
+
