@@ -3,14 +3,72 @@ let isAudioEnabled = false;
 
 let output_labels = [];
 
+let caprturePermission = false;
+
+let isSpeechInputEnabled = false;
+
+let currentlyFocused = null;
+
+let speechToText = "";
+
+let recognition;
+
+const activateSpeechAPI = () => {
+  window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+  recognition = new window.SpeechRecognition();
+
+  recognition.interimResults = true;
+  recognition.maxAlternatives = 10;
+  recognition.continuous = true;
+
+  recognition.onresult = (event) => {
+    speechToText = event.results[0][0].transcript;
+    console.log(speechToText);
+  }
+}
+
 $("head").append(
   `<script src="https://code.responsivevoice.org/responsivevoice.js?key=yJQ0SRnY"></script>`,
 );
 
+$("input").focus((e) => {
+  if($("#sonores-panel")) $("#sonores-panel").remove();
+
+  if(isSpeechInputEnabled && $(e.target).attr("type") === "text") {
+    currentlyFocused = e.target;
+    $(
+      `
+      <div id="sonores-panel" style="padding-top:10px;">
+        <button id="sonores-start" style="margin:2px;" class="btn btn-primary">Start</button>
+        <button id="sonores-stop" style="margin:2px;" class="btn btn-primary">Stop</button>
+        <button id="sonores-play" style="margin:2px;" class="btn btn-primary">Play</button>
+      </div>
+      `
+    ).insertAfter(e.target);
+  }
+
+});
+
+$(document).on("click", "#sonores-start" , function(event) {
+  recognition.abort();
+  recognition.start();
+});
+
+$(document).on("click", "#sonores-stop" , function(event) {
+  recognition.stop();
+  currentlyFocused.value = speechToText;
+});
+
+$(document).on("click", "#sonores-play" , function(event) {
+  responsiveVoice.speak(currentlyFocused.value);
+});
+
 const restoreLabels = () => {
   let labels = document.getElementsByTagName("label");
   for (let i = 0, l = labels.length; i < l; i++) {
-    labels[i].innerText = output_labels[i];
+    if(labels[i].innerText){
+      labels[i].innerText = output_labels[i];
+    }
   }
   if (isAudioEnabled) {
     disableAudio();
@@ -22,11 +80,13 @@ const translateLabels = () => {
   let labels = document.getElementsByTagName("label");
 
   for (let i = 0, l = labels.length; i < l; i++) {
-    output_labels[i] = labels[i].innerText;
+    if(labels[i].innerText){
+      output_labels[i] = labels[i].innerText;
+    }
   }
 
-  // TODOs : Have the original labels stored such that we dont need to hit
-  // APIs while toggling between languages.
+  if(output_labels.length === 0) return 0;
+
   var translatedLabels = [];
 
   let urlContent = encodeURI(output_labels.join("%"));
@@ -100,6 +160,17 @@ chrome.runtime.onMessage.addListener(function(
       isAudioEnabled = false;
     }
   }
-
+  if (request.data === "speechInput") {
+    if (!caprturePermission){
+      activateSpeechAPI();
+      caprturePermission = true;
+    }
+    if (!isSpeechInputEnabled) {
+      isSpeechInputEnabled = true;
+    } else {
+      isSpeechInputEnabled = false;
+      $("#sonores-panel").remove();
+    }
+  }
   sendResponse();
 });
