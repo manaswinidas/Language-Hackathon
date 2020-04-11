@@ -15,7 +15,6 @@ Internet pre-dominantly being in English makes non-English users dependent on ot
 Before you begin, ensure you have met the following requirements:
 <!--- These are just example requirements. Add, duplicate or remove as required --->
 * Google Chrome `v80.0.0+`
-* Node.JS (to run the mock website)
 
 ## Installing Sonores
 
@@ -39,18 +38,13 @@ Load the Sonores extension to your Google Chrome from instructions in `Installin
 
 Currently the extension works properly with the mock website that uses Bootstrap form.
 
-```
-cd mock_web/
-npm install # to install the dependencies
-npm start # to run the server
-```
+To see the mock web, you can now navigate to index.html inside mock_web and open it in web browser.
 
-To see the mock web, you can now navigate to [http://localhost:8080/](http://localhost:8080/).
-
-Click on the icon of the extension on top right corner. You are given two options:
+Click on the icon of the extension on top right corner. You are given three options:
 
 1. To translate the labels.
 2. To get the audio output of the labels.
+3. To give the audio input to the form.
 
 ## Authors
 
