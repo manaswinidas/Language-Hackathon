@@ -12,9 +12,8 @@ Internet pre-dominantly being in English makes non-English users dependent on ot
 
 ## Prerequisites
 
-Before you begin, ensure you have met the following requirements:
+To run this extension you need to have the latest stable version of Google Chrome.
 <!--- These are just example requirements. Add, duplicate or remove as required --->
-* Google Chrome `v80.0.0+`
 
 ## Installing Sonores
 
