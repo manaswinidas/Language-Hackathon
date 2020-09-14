@@ -3,6 +3,8 @@ let isAudioEnabled = false;
 
 let output_labels = [];
 
+let output_placeholders=[];
+
 let caprturePermission = false;
 
 let isSpeechInputEnabled = false;
@@ -63,11 +65,20 @@ $(document).on("click", "#sonores-play" , function(event) {
   responsiveVoice.speak(currentlyFocused.value);
 });
 
-const restoreLabels = () => {
+const restoreLabelsPlaceholders = () => {
   let labels = document.getElementsByTagName("label");
   for (let i = 0, l = labels.length; i < l; i++) {
     if(labels[i].innerText){
       labels[i].innerText = output_labels[i];
+    }
+  }
+  var ids = $('.form-control').map(function() {
+    return $(this).attr('id');
+  });
+
+  for (let i = 0, l = ids.length; i < l; i++) {
+    if(document.getElementById(ids[i]).placeholder){
+      document.getElementById(ids[i]).placeholder = output_placeholders[i];
     }
   }
   if (isAudioEnabled) {
@@ -117,6 +128,45 @@ const translateLabels = () => {
   });
 };
 
+const translatePlaceholders = () => {
+  var ids = $('.form-control').map(function() {
+    return $(this).attr('id');
+  });
+
+  for (let i = 0, l = ids.length; i < l; i++) {
+    if(document.getElementById(ids[i]).placeholder){
+      output_placeholders[i] = document.getElementById(ids[i]).placeholder;
+    }
+  }
+
+  if(output_placeholders.length === 0) return 0;
+
+  var translatedPlaceholders = [];
+
+  let urlContent = encodeURI(output_placeholders.join("$"));
+
+  $.ajax({
+    url:
+      "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=hi&dt=t&q=" +
+      urlContent,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+    dataType: "json",
+
+    success: function(data) {
+      let translatedResponse = data[0][0][0];
+      console.log(data[0][0][0]);
+      let translatedresponse = translatedResponse.replace("अपनी जन्म तिथि दर्ज करें", "$ ")
+      translatedPlaceholders = translatedresponse.split("$ ");
+      for (let i = 0, l = ids.length; i < l; i++) {
+        document.getElementById(ids[i]).placeholder = translatedPlaceholders[i];
+      }
+    },
+  });
+};
+
 const enableAudio = () => {
   console.log("inside enable audio");
   let labels = document.getElementsByTagName("label");
@@ -145,9 +195,10 @@ chrome.runtime.onMessage.addListener(function(
   if (request.data === "translate") {
     if (!isTranslated) {
       translateLabels();
+      translatePlaceholders();
       isTranslated = true;
     } else {
-      restoreLabels();
+      restoreLabelsPlaceholders();
       isTranslated = false;
     }
   }
