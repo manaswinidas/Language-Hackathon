@@ -144,8 +144,6 @@ const translatePlaceholders = () => {
   var translatedPlaceholders = [];
 
   let urlContent = encodeURI(output_placeholders.join("$"));
-  // let urlcontent = urlContent.replace("$$", "$");
-  // console.log(urlcontent);
 
   $.ajax({
     url:
