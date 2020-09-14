@@ -75,7 +75,7 @@ const restoreLabelsPlaceholders = () => {
   var ids = $('.form-control').map(function() {
     return $(this).attr('id');
   });
-  console.log(ids);
+
   for (let i = 0, l = ids.length; i < l; i++) {
     if(document.getElementById(ids[i]).placeholder){
       document.getElementById(ids[i]).placeholder = output_placeholders[i];
@@ -144,7 +144,8 @@ const translatePlaceholders = () => {
   var translatedPlaceholders = [];
 
   let urlContent = encodeURI(output_placeholders.join("$"));
-  console.log(urlContent);
+  // let urlcontent = urlContent.replace("$$", "$");
+  // console.log(urlcontent);
 
   $.ajax({
     url:
@@ -159,7 +160,8 @@ const translatePlaceholders = () => {
     success: function(data) {
       let translatedResponse = data[0][0][0];
       console.log(data[0][0][0]);
-      translatedPlaceholders = translatedResponse.split("$ ");
+      let translatedresponse = translatedResponse.replace("अपनी जन्म तिथि दर्ज करें", "$ ")
+      translatedPlaceholders = translatedresponse.split("$ ");
       for (let i = 0, l = ids.length; i < l; i++) {
         document.getElementById(ids[i]).placeholder = translatedPlaceholders[i];
       }
